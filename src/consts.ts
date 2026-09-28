@@ -3,3 +3,7 @@
 
 export const SITE_TITLE = 'Astro Blog';
 export const SITE_DESCRIPTION = 'Welcome to my website!';
+
+// Prefix an absolute path with the configured `base` (e.g. '/my-tech-blog').
+export const withBase = (path: string) =>
+	`${import.meta.env.BASE_URL.replace(/\/$/, '')}${path}`;
