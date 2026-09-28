@@ -1,0 +1,20 @@
+---
+import ListPage from '../../components/ListPage.astro';
+import { withBase } from '../../consts';
+import { getPosts, groupBySeries } from '../../utils/posts';
+
+const series = [...groupBySeries(await getPosts()).entries()];
+---
+
+<ListPage title="시리즈" description="순서대로 읽으면 좋은 연재 글 모음">
+	{series.length === 0 && <p>아직 시리즈가 없어요.</p>}
+	<ul>
+		{
+			series.map(([slug, { name, posts }]) => (
+				<li>
+					<a href={withBase(`/series/${slug}/`)}>{name}</a> ({posts.length}편)
+				</li>
+			))
+		}
+	</ul>
+</ListPage>

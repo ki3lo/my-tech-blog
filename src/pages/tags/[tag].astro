@@ -1,0 +1,18 @@
+---
+import ListPage from '../../components/ListPage.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts, groupByTag } from '../../utils/posts';
+
+export async function getStaticPaths() {
+	return [...groupByTag(await getPosts()).entries()].map(([tag, { name, posts }]) => ({
+		params: { tag },
+		props: { name, posts },
+	}));
+}
+
+const { name, posts } = Astro.props;
+---
+
+<ListPage title={`#${name}`} description={`#${name} 태그가 붙은 글`}>
+	<PostList posts={posts} />
+</ListPage>

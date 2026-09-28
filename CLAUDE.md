@@ -20,3 +20,16 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+## Post ideas
+
+`input/` (gitignored) holds the author's career history, projects, skills, and notes.
+When asked for post ideas or drafts, read it first and ground suggestions in it. Never copy
+anything from `input/` that looks confidential or personal into `src/content/`.
+
+## Writing posts
+
+- Start from `docs/post-template.md`; copy it to `src/content/blog/<english-slug>.md`.
+- Frontmatter schema lives in `src/content.config.ts`: `category` must be a key of `CATEGORIES` in `src/consts.ts`; `tags`, `series`/`seriesOrder`, and `draft` are optional.
+- `draft: true` posts appear only in `npm run dev`, never in the production build.
+- Internal links must go through `withBase()` from `src/consts.ts` because the site is served under `/my-tech-blog`.

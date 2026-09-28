@@ -14,7 +14,8 @@ export default defineConfig({
 			provider: fontProviders.local(),
 			name: 'Atkinson',
 			cssVariable: '--font-atkinson',
-			fallbacks: ['sans-serif'],
+			// Atkinson has no Hangul glyphs, so Korean text falls through to these.
+			fallbacks: ['Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', 'sans-serif'],
 			options: {
 				variants: [
 					{

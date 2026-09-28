@@ -1,0 +1,27 @@
+---
+import ListPage from '../../components/ListPage.astro';
+import PostList from '../../components/PostList.astro';
+import { CATEGORIES, type Category } from '../../consts';
+import { getPosts } from '../../utils/posts';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	return (Object.keys(CATEGORIES) as Category[]).map((category) => ({
+		params: { category },
+		props: { category, posts: posts.filter((post) => post.data.category === category) },
+	}));
+}
+
+const { category, posts } = Astro.props;
+const { label, description } = CATEGORIES[category];
+---
+
+<ListPage title={label} description={description}>
+	<p class="lead">{description}</p>
+	<PostList posts={posts} />
+</ListPage>
+<style>
+	.lead {
+		color: rgb(var(--gray));
+	}
+</style>

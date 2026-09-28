@@ -1,0 +1,49 @@
+---
+import ListPage from '../../components/ListPage.astro';
+import { withBase } from '../../consts';
+import { getPosts, groupByTag } from '../../utils/posts';
+
+const tags = [...groupByTag(await getPosts()).entries()].sort(
+	(a, b) => b[1].posts.length - a[1].posts.length || a[1].name.localeCompare(b[1].name),
+);
+---
+
+<ListPage title="태그" description="주제별로 모아 보는 글 목록">
+	{tags.length === 0 && <p>아직 태그가 없어요.</p>}
+	<ul class="tag-cloud">
+		{
+			tags.map(([slug, { name, posts }]) => (
+				<li>
+					<a href={withBase(`/tags/${slug}/`)}>
+						#{name} <span>{posts.length}</span>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</ListPage>
+<style>
+	.tag-cloud {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		padding: 0;
+		list-style: none;
+	}
+	.tag-cloud a {
+		display: inline-block;
+		padding: 0.2em 0.8em;
+		border-radius: 999px;
+		background: rgb(var(--gray-light));
+		color: rgb(var(--gray-dark));
+		text-decoration: none;
+	}
+	.tag-cloud a:hover {
+		background: var(--accent);
+		color: white;
+	}
+	.tag-cloud span {
+		opacity: 0.6;
+		font-size: 0.8em;
+	}
+</style>

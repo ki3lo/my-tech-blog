@@ -1,0 +1,30 @@
+---
+import FormattedDate from '../../components/FormattedDate.astro';
+import ListPage from '../../components/ListPage.astro';
+import { withBase } from '../../consts';
+import { getPosts, groupBySeries } from '../../utils/posts';
+
+export async function getStaticPaths() {
+	return [...groupBySeries(await getPosts()).entries()].map(([series, { name, posts }]) => ({
+		params: { series },
+		props: { name, posts },
+	}));
+}
+
+const { name, posts } = Astro.props;
+---
+
+<ListPage title={name} description={`${name} 시리즈 (${posts.length}편)`}>
+	<ol>
+		{
+			posts.map((post) => (
+				<li>
+					<a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a>{' '}
+					<small>
+						<FormattedDate date={post.data.pubDate} />
+					</small>
+				</li>
+			))
+		}
+	</ol>
+</ListPage>

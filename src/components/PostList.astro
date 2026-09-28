@@ -1,0 +1,84 @@
+---
+import { CATEGORIES, withBase } from '../consts';
+import type { Post } from '../utils/posts';
+import FormattedDate from './FormattedDate.astro';
+import TagList from './TagList.astro';
+
+interface Props {
+	posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+	posts.length === 0 ? (
+		<p class="empty">아직 글이 없어요.</p>
+	) : (
+		<ul class="posts">
+			{posts.map((post) => (
+				<li>
+					<div class="meta">
+						<FormattedDate date={post.data.pubDate} />
+						<span aria-hidden="true">·</span>
+						<a href={withBase(`/categories/${post.data.category}/`)}>
+							{CATEGORIES[post.data.category].label}
+						</a>
+						{post.data.draft && <span class="draft">초안</span>}
+					</div>
+					<h3>
+						<a href={withBase(`/blog/${post.id}/`)}>{post.data.title}</a>
+					</h3>
+					<p class="description">{post.data.description}</p>
+					<TagList tags={post.data.tags} />
+				</li>
+			))}
+		</ul>
+	)
+}
+<style>
+	.posts {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.posts li {
+		padding: 1.25em 0;
+		border-bottom: 1px solid rgb(var(--gray-light));
+	}
+	.meta {
+		display: flex;
+		gap: 0.5em;
+		align-items: center;
+		color: rgb(var(--gray));
+		font-size: 0.8em;
+	}
+	.meta a {
+		color: inherit;
+	}
+	h3 {
+		margin: 0.2em 0;
+		font-size: 1.3em;
+	}
+	h3 a {
+		color: rgb(var(--black));
+		text-decoration: none;
+	}
+	h3 a:hover {
+		color: var(--accent);
+	}
+	.description {
+		margin: 0 0 0.5em;
+		color: rgb(var(--gray-dark));
+		font-size: 0.9em;
+	}
+	.draft {
+		padding: 0 0.5em;
+		border-radius: 4px;
+		background: #ffe8a3;
+		color: #6b4e00;
+	}
+	.empty {
+		color: rgb(var(--gray));
+	}
+</style>
